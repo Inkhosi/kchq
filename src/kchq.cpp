@@ -9,6 +9,8 @@
 
 int main(int argc, char *argv[])
 {
+    kchq::Datastore ds("./store", "https://");
+    
     kchq::CLI cli( argc, argv );
     if ( cli.has_arg("--version") || cli.has_arg("-v") )
     {
@@ -19,7 +21,18 @@ int main(int argc, char *argv[])
         std::string_view branch = cli.get_arg("--latest");
         std::cout << "latest retrival for " << branch  << " is WIP" << std::endl;
     }
-    // TODO Local DB Update
+    if ( cli.has_arg("--update") )
+    {
+        if ( ds.update_local_store() < 0 )
+        {
+            std::cerr << "Local datastore update failed." << std::endl;
+            return -1;
+        }
+        else
+        {
+            std::cout << "Local store updated" << std::endl;
+        }
+    }
     // TODO query function delta between selected releases
     // TODO Delta Display
     // TODO Documentation Display 
